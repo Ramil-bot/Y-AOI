@@ -3,10 +3,9 @@ if(POLICY CMP0079)
   cmake_policy(SET CMP0079 NEW)
 endif()
 
-set(CLIENT_SOURCES
-    main.cpp 
-    parse_cl.cpp
-    parse_cl.h
+file(GLOB_RECURSE CLIENT_SOURCES
+  "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp"
+  "${CMAKE_CURRENT_SOURCE_DIR}/src/*.h"
 )
 
 set(GETOPT_SOURCES
