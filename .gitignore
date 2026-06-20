@@ -3,4 +3,4 @@ src/*
 testStun/*
 deploy*
 buildWin/*
-vcpkg/*
+vcpkg/*
