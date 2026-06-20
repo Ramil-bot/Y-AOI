@@ -1,6 +1,5 @@
 result/*
-src/*
-testStun/*
 deploy*
 buildWin/*
 vcpkg/*
+testStun/build/*
