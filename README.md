@@ -13,9 +13,9 @@ cmake .. \
 ```
 
 ## Сборка под Linux 
-```
+
 ```
 mkdir build && cd build
 cmake ..
-```
+
 ```
