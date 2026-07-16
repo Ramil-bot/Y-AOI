@@ -1,0 +1,1 @@
+/usr/bin/c++ -Wl,--dependency-file=CMakeFiles/Messanger.dir/link.d CMakeFiles/Messanger.dir/src/api/api_sender.cpp.o CMakeFiles/Messanger.dir/src/base64.cpp.o CMakeFiles/Messanger.dir/src/client.cpp.o CMakeFiles/Messanger.dir/src/main.cpp.o CMakeFiles/Messanger.dir/src/parse_cl.cpp.o CMakeFiles/Messanger.dir/src/server.cpp.o -o Messanger  /usr/lib/libdatachannel.so.0.24.3

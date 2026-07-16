@@ -1,46 +1,78 @@
 cmake_minimum_required(VERSION 3.16)
 
-project(Test VERSION 0.1 LANGUAGES CXX)
+project(Qt6Test VERSION 0.1 LANGUAGES CXX)
 
+set(CMAKE_AUTOUIC ON)
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
+
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(Qt6 REQUIRED COMPONENTS Quick)
+find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets LinguistTools)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets LinguistTools)
 
-qt_standard_project_setup(REQUIRES 6.10)
+set(TS_FILES QT6Test_ru_Ru.ts)
 
-# Content of downloaded design from Figma to Qt or similar
-if (EXISTS "${CMAKE_CURRENT_LIST_DIR}/importedcontent/CMakeLists.txt")
-    add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/importedcontent)
+set(PROJECT_SOURCES
+        main.cpp
+        mainwindow.cpp
+        mainwindow.h
+        mainwindow.ui
+        ${TS_FILES}
+)
+
+if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
+    qt_add_executable(Qt6Test
+        MANUAL_FINALIZATION
+        ${PROJECT_SOURCES}
+    )
+# Define target properties for Android with Qt 6 as:
+#    set_property(TARGET Qt6Test APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
+#                 ${CMAKE_CURRENT_SOURCE_DIR}/android)
+# For more information, see https://doc.qt.io/qt-6/qt-add-executable.html#target-creation
+
+    qt_create_translation(QM_FILES ${CMAKE_SOURCE_DIR} ${TS_FILES})
+else()
+    if(ANDROID)
+        add_library(Qt6Test SHARED
+            ${PROJECT_SOURCES}
+        )
+# Define properties for Android with Qt 5 after find_package() calls as:
+#    set(ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/android")
+    else()
+        add_executable(Qt6Test
+            ${PROJECT_SOURCES}
+        )
+    endif()
+
+    qt5_create_translation(QM_FILES ${CMAKE_SOURCE_DIR} ${TS_FILES})
 endif()
 
-qt_add_executable(appTest
-    main.cpp
-)
-
-qt_add_qml_module(appTest
-    URI Test
-    QML_FILES
-        Main.qml
-)
+target_link_libraries(Qt6Test PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
 # If you are developing for iOS or macOS you should consider setting an
 # explicit, fixed bundle identifier manually though.
-set_target_properties(appTest PROPERTIES
-#    MACOSX_BUNDLE_GUI_IDENTIFIER com.example.appTest
+if(${QT_VERSION} VERSION_LESS 6.1.0)
+  set(BUNDLE_ID_OPTION MACOSX_BUNDLE_GUI_IDENTIFIER com.example.Qt6Test)
+endif()
+set_target_properties(Qt6Test PROPERTIES
+    ${BUNDLE_ID_OPTION}
     MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
     MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
     MACOSX_BUNDLE TRUE
-    WIN32_EXECUTABLE FALSE
+    WIN32_EXECUTABLE TRUE
 )
 
-target_link_libraries(appTest
-    PRIVATE Qt6::Quick
-)
-
-install(TARGETS appTest
+include(GNUInstallDirs)
+install(TARGETS Qt6Test
     BUNDLE DESTINATION .
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
+
+if(QT_VERSION_MAJOR EQUAL 6)
+    qt_finalize_executable(Qt6Test)
+endif()
 
