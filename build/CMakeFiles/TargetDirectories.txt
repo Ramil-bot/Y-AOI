@@ -1,3 +1,0 @@
-/home/YunnaAOI/Media/media/FuckYou/MyProjects/CppProjects/RTC/build/CMakeFiles/Messanger.dir
-/home/YunnaAOI/Media/media/FuckYou/MyProjects/CppProjects/RTC/build/CMakeFiles/edit_cache.dir
-/home/YunnaAOI/Media/media/FuckYou/MyProjects/CppProjects/RTC/build/CMakeFiles/rebuild_cache.dir
